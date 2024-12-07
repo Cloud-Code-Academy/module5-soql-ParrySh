@@ -44,9 +44,12 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetContactsByFirstName method to cover this method
      */
     public static List<Contact> GetContactsByFirstName () {
-        List<Contact> contacts = [SELECT Id, FirstName, LastName, Phone, Email FROM Contact WHERE FirstName = 'John'];
-        return contacts.isEmpty() ? new List<Contact>() : contacts;
+        List<Contact> contacts = [SELECT Id, FirstName, LastName, Name, Phone, Email 
+            FROM Contact 
+            WHERE FirstName = 'John'];
+        return contacts;
     }
+
 
     /**
      * Question 3
@@ -74,7 +77,10 @@ public with sharing class SOQL {
      * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
      */
     public static List<Opportunity> GetClosedWonOpportunityCountByAccount (String AccountId) {
-        List<Opportunity> ClosedWonOpportunities = [SELECT Id, Name, Amount, CloseDate, StageName FROM Opportunity WHERE AccountId = : accountId AND StageName = 'Closed Won'];
+        List<Opportunity> ClosedWonOpportunities = [SELECT Id, Name, Amount, CloseDate, StageName, AccountID 
+            FROM Opportunity 
+            WHERE AccountId = : AccountId 
+            AND StageName = 'Closed Won'];
         return closedWonOpportunities.isEmpty() ? new List<Opportunity>() : closedWonOpportunities;
     }
 
@@ -85,9 +91,10 @@ public with sharing class SOQL {
      * @return The Integer count of Account records.
      * Update the corresponding test class and testGetAccountCount method to cover this method
      */
-    //[public | private ] [static] data_type method_name (input parameters) {
-    //  The body of the method
-    //}
+    public static Integer GetAccountCount() {
+        Integer accountCount = [SELECT COUNT() FROM Account];
+        return accountCount;
+    }
 
     /**
      * Question 6
@@ -96,9 +103,20 @@ public with sharing class SOQL {
      * @return A map of Task Ids to Task records.
      * Update the corresponding test class and testGetTasksDueNextWeek method to cover this method
      */
-    //[public | private ] [static] data_type method_name (input parameters) {
-    //  The body of the method
-    //}
+    public static Map<Id,Task> GetTasksDueNextWeek() {
+        Date today =  Date.today();
+        Date nextWeek = today.addDays(7);
+        //list tasks within 7 days
+        List <Task> tasks = [SELECT Id, Subject, Status, Priority, ActivityDate
+            FROM Task
+            WHERE ActivityDate >= :today AND ActivityDate <= :nextWeek];
+        //create map
+        Map<Id, Task> taskMap = new Map<Id, Task>();
+        for (Task task : tasks) {
+        taskMap.put(task.Id, task);
+    }
+        return taskMap;
+}
 
     /**
      * Question 7
@@ -107,9 +125,14 @@ public with sharing class SOQL {
      * @return A list of Contact records.
      * Update the corresponding test class and testGetContactsByEmailDomain method to cover this method
      */
-    //[public | private ] [static] data_type method_name (input parameters) {
-    //  The body of the method
-    //}
+    public static List<Contact>  GetContactsByEmailDomain() {
+        List<Contact> contactsWithExampleDotCom = [SELECT Id, Name, email 
+            FROM Contact 
+            WHERE email LIKE '%example.com%'];
+            
+        return contactsWithExampleDotCom.isEmpty() ? new List<Contact>() : contactsWithExampleDotCom;
+    }
+    
 
     /**
      * Question 8
@@ -119,7 +142,13 @@ public with sharing class SOQL {
      * @return A list of Opportunity records.
      */
     public static List<Opportunity> getOpportunitiesByNameKeyword(String keyword) {
-        return null; // Replace null with the variable you used to store the result
+        if (String.isBlank(keyword)) {
+            return new List<Opportunity>();
+        }
+        List <Opportunity> opportunitiesWithKeyword = [SELECT ID, Name, StageName, CloseDate ,Amount 
+            FROM Opportunity
+            WHERE Name Like : ('%' + keyword + '%')];
+        return opportunitiesWithKeyword; // Replace null with the variable you used to store the result
     }
 
     /**
