@@ -157,7 +157,11 @@ public with sharing class SOQL {
      * @return A list of Case records.
      */
     public static List<Case> getFilterCaseOrigins() {
-        return null; // Replace null with the variable you used to store the result
+        List <Case> CaseOriginNotWebEmail = [SELECT ID, Origin
+            FROM Case
+            WHERE Origin NOT IN ('web', 'email')
+            AND Origin != null];
+        return CaseOriginNotWebEmail; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -170,9 +174,15 @@ public with sharing class SOQL {
      * @return A list of Lead records.
      * Update the corresponding test class and testGetLeadsBySourceOrTitle method to cover this method
      */
-    //[public | private ] [static] data_type method_name (input parameters) {
-    //  The body of the method
-    //}    
+    public static List<Lead> GetLeadsBySourceOrTitle(String leadSource, String keyword) {
+        if (String.isBlank(leadSource) && String.isBlank(keyword)) {
+            return new List<Lead>();
+        }
+        List <Lead> LeadsBySourceTitle = [SELECT Id, LeadSource, Company, FirstName, LastName, Title, Phone, Email
+            FROM Lead
+            WHERE (LeadSource = :leadSource OR Title LIKE :('%' + keyword + '%'))];
+        return LeadsBySourceTitle;
+    }    
 
     /**
      * Question 11
@@ -183,15 +193,17 @@ public with sharing class SOQL {
      */
     public static List<String> getContactNamesByAccount(Id accountId) {
         // Create a list to hold the Contact LastNames
-
+        List<String> contactLastNames = new List<String>();
         // Query the Contacts
-        // Loop through each Contact and add the LastName to the list
-        //for () {
-        //    
-        //}
-
+        List<Contact> contactNamesByAccount = [SELECT LastName
+            FROM Contact
+            WHERE AccountId = :AccountId];
+         // Loop through each Contact and add the LastName to the list
+        for (Contact Contact : contactNamesByAccount ) {
+            contactLastNames.add(contact.LastName);
+        }
         // Return the list of Contact LastNames
-        return null; // Replace null with the variable you used to store the result
+        return contactLastNames; // Replace null with the variable you used to store the result
     }
 
     /**
@@ -203,9 +215,18 @@ public with sharing class SOQL {
      */
     public static Decimal getTotalRevenueByStage(String stage) {
         // Use AggregateQuery to get the total revenue
-
+        AggregateResult[] results = [SELECT SUM(Amount) totalRevenue
+                                    FROM Opportunity
+                                    WHERE StageName = :stage OR Amount > 10000];
         // Return the total revenue
-        return null; // Replace null with the variable you used to store the result
+       if (results.size() > 0){
+        Decimal totalRevenue = (Decimal) results[0].get('totalRevenue');
+
+       if (totalRevenue != null) {
+            return totalRevenue;
+            }
+        }
+        return 0;
     }
 
     /**
@@ -214,7 +235,11 @@ public with sharing class SOQL {
      * @return A list of the first 10 Accounts ordered by Name.
      */
     public static List<Account> getFirstTenAccounts() {
-        return null; // Replace null with the variable you used to store the result
+        List <Account> accounts = [SELECT Name, Id
+            FROM Account 
+            ORDER BY Name 
+            LIMIT 10];
+        return accounts; // Replace null with the variable you used to store the result
     }
     
     /**
@@ -223,8 +248,13 @@ public with sharing class SOQL {
      * @return A list of Opportunities with an Amount greater than 100,000, ordered by CloseDate, and limited to 5 records.
      */
     public static List<Opportunity> getHighValueOpportunities() {
-        return null; // Replace null with the variable you used to store the result
-    }
+        List <Opportunity> opportunities = [SELECT Amount, AccountId, CloseDate, StageName
+        FROM Opportunity 
+        WHERE Amount > 100000
+        ORDER BY CloseDate ASC
+        LIMIT 5];
+    return opportunities; // Replace null with the variable you used to store the result
+}
     
     /**
      * Question 15
@@ -232,7 +262,13 @@ public with sharing class SOQL {
      * @return A list of Contacts
      */
     public static List<Contact> getBirthdateContacts() {
-        return null; // Replace null with the variable you used to store the result
+        List <Contact> birthdatecontacts = [
+            SELECT Birthdate, Name, Phone, Email
+            FROM Contact
+            ORDER BY Birthdate DESC
+            LIMIT 3
+        ];
+        return birthdatecontacts; // Replace null with the variable you used to store the result
     }
     
     /**
@@ -241,7 +277,14 @@ public with sharing class SOQL {
      * @return A list of Cases
      */
     public static List<Case> getCasesWithStatus() {
-        return null; // Replace null with the variable you used to store the result
+        List <Case> casesWithStatus = [
+            SELECT Status, CreatedDate, Id
+            FROM Case
+            WHERE status = 'open'
+            ORDER BY CreatedDate
+            LIMIT 10 OFFSET 5
+        ];
+        return casesWithStatus; // Replace null with the variable you used to store the result
     }
 
     /**

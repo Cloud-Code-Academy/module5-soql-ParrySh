@@ -207,7 +207,7 @@ public with sharing class SOQLTest {
         opportunities = SOQL.getOpportunitiesByNameKeyword(null);
         System.assertEquals(0, opportunities.size(), 'Number of opportunities returned is incorrect.');
     }
-/*
+
     @IsTest
     static void testGetFilterCaseOrigins() {
         // Create test data
@@ -249,7 +249,7 @@ public with sharing class SOQLTest {
         insert new List<Lead>{testLead1, testLead2, testLead3, testLead4};
 
         // Call the method to test
-        List<Lead> leads = null; //Replace null with your method passing 'Web', 'Engineer' 
+        List<Lead> leads = SOQL.GetLeadsBySourceOrTitle('Web', 'Engineer'); //Replace null with your method passing 'Web', 'Engineer' 
 
         // Assert that the number of leads returned is correct
         System.assertEquals(3, leads.size(), 'Number of leads returned is incorrect.');
@@ -432,7 +432,7 @@ public with sharing class SOQLTest {
         System.assertEquals(cases[5].Id, returnedCases[0].Id, 'First case returned is not the 6th case created.');
     }
     
-
+/*
     @IsTest
     static void testGetCaseIdsByAccount() {
         // Create test data
