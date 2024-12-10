@@ -432,7 +432,7 @@ public with sharing class SOQLTest {
         System.assertEquals(cases[5].Id, returnedCases[0].Id, 'First case returned is not the 6th case created.');
     }
     
-/*
+
     @IsTest
     static void testGetCaseIdsByAccount() {
         // Create test data
@@ -748,7 +748,5 @@ public with sharing class SOQLTest {
         // Assert that the Primary Contact was set correctly
         System.assertEquals(testContact2.Id, updatedOpp.Primary_Contact__c, 'Primary Contact was not set correctly.');
     }
-
-*/
 
 }
