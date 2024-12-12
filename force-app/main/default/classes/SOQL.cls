@@ -76,10 +76,10 @@ public with sharing class SOQL {
      * @return A list of Opportunities with important opportunities fields
      * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
      */
-    public static List<Opportunity> getClosedWonOpportunityCountByAccount (String AccountId) {
-        List<Opportunity> ClosedWonOpportunities = [SELECT Id, Name, Amount, CloseDate, StageName, AccountID 
+    public static List<Opportunity> getClosedWonOpportunityCountByAccount (String accountId) {
+        List<Opportunity> closedWonOpportunities = [SELECT Id, Name, Amount, CloseDate, StageName, AccountID 
             FROM Opportunity 
-            WHERE AccountId = : AccountId 
+            WHERE AccountId = : accountId 
             AND StageName = 'Closed Won'];
         return closedWonOpportunities.isEmpty() ? new List<Opportunity>() : closedWonOpportunities;
     }
@@ -157,7 +157,7 @@ public with sharing class SOQL {
      * @return A list of Case records.
      */
     public static List<Case> getFilterCaseOrigins() {
-        List <Case> CaseOriginNotWebEmail = [SELECT ID, Origin
+        List <Case> caseOriginNotWebEmail = [SELECT ID, Origin
             FROM Case
             WHERE Origin NOT IN ('web', 'email')
             AND Origin != null];
@@ -178,7 +178,7 @@ public with sharing class SOQL {
         if (String.isBlank(leadSource) && String.isBlank(keyword)) {
             return new List<Lead>();
         }
-        List <Lead> LeadsBySourceTitle = [SELECT Id, LeadSource, Company, FirstName, LastName, Title, Phone, Email
+        List <Lead> leadsBySourceTitle = [SELECT Id, LeadSource, Company, FirstName, LastName, Title, Phone, Email
             FROM Lead
             WHERE (LeadSource = :leadSource OR Title LIKE :('%' + keyword + '%'))];
         return LeadsBySourceTitle;
@@ -199,7 +199,7 @@ public with sharing class SOQL {
             FROM Contact
             WHERE AccountId = :AccountId];
          // Loop through each Contact and add the LastName to the list
-        for (Contact Contact : contactNamesByAccount ) {
+        for (Contact contact : contactNamesByAccount ) {
             contactLastNames.add(contact.LastName);
         }
         // Return the list of Contact LastNames
