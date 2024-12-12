@@ -43,7 +43,7 @@ public with sharing class SOQL {
      * @return A list of Contact records.
      * Update the corresponding test class and testGetContactsByFirstName method to cover this method
      */
-    public static List<Contact> GetContactsByFirstName () {
+    public static List<Contact> getContactsByFirstName() {
         List<Contact> contacts = [SELECT Id, FirstName, LastName, Name, Phone, Email 
             FROM Contact 
             WHERE FirstName = 'John'];
@@ -58,7 +58,7 @@ public with sharing class SOQL {
      * @return A list of Contact Ids.
      * Update the corresponding test class and testGetContactIdsByLastName method to cover this method
      */
-    public static List <Id> GetContactIdsByLastName() {
+    public static List <Id> getContactIdsByLastName() {
         List<Contact> contacts = [SELECT Id FROM Contact WHERE LastName = 'Smith' OR LastName = 'Jones'];
         List<Id> contactIds = new List<Id>();
         for (Contact c : contacts) {
@@ -76,7 +76,7 @@ public with sharing class SOQL {
      * @return A list of Opportunities with important opportunities fields
      * Update the corresponding test class and testGetClosedWonOpportunityCountByAccount method to cover this method
      */
-    public static List<Opportunity> GetClosedWonOpportunityCountByAccount (String AccountId) {
+    public static List<Opportunity> getClosedWonOpportunityCountByAccount (String AccountId) {
         List<Opportunity> ClosedWonOpportunities = [SELECT Id, Name, Amount, CloseDate, StageName, AccountID 
             FROM Opportunity 
             WHERE AccountId = : AccountId 
@@ -91,7 +91,7 @@ public with sharing class SOQL {
      * @return The Integer count of Account records.
      * Update the corresponding test class and testGetAccountCount method to cover this method
      */
-    public static Integer GetAccountCount() {
+    public static Integer getAccountCount() {
         Integer accountCount = [SELECT COUNT() FROM Account];
         return accountCount;
     }
@@ -103,7 +103,7 @@ public with sharing class SOQL {
      * @return A map of Task Ids to Task records.
      * Update the corresponding test class and testGetTasksDueNextWeek method to cover this method
      */
-    public static Map<Id,Task> GetTasksDueNextWeek() {
+    public static Map<Id,Task> getTasksDueNextWeek() {
         Date today =  Date.today();
         Date nextWeek = today.addDays(7);
         //list tasks within 7 days
@@ -125,7 +125,7 @@ public with sharing class SOQL {
      * @return A list of Contact records.
      * Update the corresponding test class and testGetContactsByEmailDomain method to cover this method
      */
-    public static List<Contact>  GetContactsByEmailDomain() {
+    public static List<Contact>  getContactsByEmailDomain() {
         List<Contact> contactsWithExampleDotCom = [SELECT Id, Name, email 
             FROM Contact 
             WHERE email LIKE '%example.com%'];
@@ -174,7 +174,7 @@ public with sharing class SOQL {
      * @return A list of Lead records.
      * Update the corresponding test class and testGetLeadsBySourceOrTitle method to cover this method
      */
-    public static List<Lead> GetLeadsBySourceOrTitle(String leadSource, String keyword) {
+    public static List<Lead> getLeadsBySourceOrTitle(String leadSource, String keyword) {
         if (String.isBlank(leadSource) && String.isBlank(keyword)) {
             return new List<Lead>();
         }
